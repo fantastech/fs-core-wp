@@ -1,5 +1,8 @@
 name: Main
 
+env:
+  themePath: 'wp-content/themes/child-theme'
+
 on:
   push:
     branches:
@@ -37,15 +40,15 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ matrix.node }}-yarn-
 
       - name: Install dependencies using Yarn
-        run: yarn install --frozen-lockfile --cwd wp-content/themes/child-theme-name
+        run: yarn --cwd ${{env.themePath}} install --frozen-lockfile 
 
       - name: Execute the Node test scripts
-        run: yarn test --cwd wp-content/themes/child-theme-name
+        run: yarn --cwd ${{env.themePath}} test
 
       - name: Verify that assets are built successfully
         run: |
-          yarn build:production --cwd wp-content/themes/child-theme-name
-          cat assets/mix-manifest.json
+          yarn --cwd ${{env.themePath}} build:production
+          cat ${{env.themePath}}/assets/mix-manifest.json
   php:
     name: PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
@@ -75,7 +78,7 @@ jobs:
           restore-keys: ${{ runner.os }}-${{ matrix.php }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader --no-suggest --working-dir='wp-content/themes/child-theme-name'
+        run: composer install --no-progress --prefer-dist --optimize-autoloader --no-suggest --working-dir='${{env.themePath}}'
 
       - name: Execute the PHP lint script
-        run: composer run-script style:check --working-dir='wp-content/themes/child-theme-name'
+        run: composer run-script style:check --working-dir='${{env.themePath}}'
