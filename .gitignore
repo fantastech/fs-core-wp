@@ -1,7 +1,8 @@
 /*
 
-# ignore everything in the root except the "wp-content" directory.
+# ignore everything in the root except the "wp-content" & "git" directories.
 !wp-content/
+!.git*
 
 # ignore everything in the "wp-content" directory, except:
 # "themes" directory
